@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Straza</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Straza</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<!-- Keep in step with versionName and versionCode in androidApp/build.gradle.kts. -->
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.27</string>
+	<key>CFBundleVersion</key>
+	<string>28</string>
+	<!-- The asset-catalog compiler also injects this. A build without it is
+	     rejected at upload (ITMS-90713). -->
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<!-- Compose Multiplatform aborts at launch if this key is absent. It lifts
+	     UIKit's 60 Hz frame cap so Compose can drive ProMotion displays. -->
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Straza uses the camera to scan the enrollment code that pairs this phone with your deployment.</string>
+	<!-- Shown on the Face ID prompt that gates signing with the Secure Enclave key. -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>Approving or denying a request is confirmed with Face ID before it is signed.</string>
+	<!-- Standard TLS only, which is exempt. This answers the export-compliance
+	     question in App Store Connect for every build. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+</dict>
+</plist>

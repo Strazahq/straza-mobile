@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  play flavor: the FCM transport, merged into the main manifest. The
+  firebase-messaging library merges in FirebaseInitProvider and the FCM
+  internals. The embedded-fcm-distributor library merges in an exported c2dm
+  receiver guarded by com.google.android.c2dm.permission.SEND and a
+  non-exported UnifiedPush distributor receiver at priority -500. That c2dm
+  receiver coexists with firebase-messaging's own: test both on a device for
+  duplicate or lost delivery before a play release.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!--
+          FCM receiver. Not exported: FCM delivers through the play-services
+          messaging library, not a public broadcast. The payload is parsed by
+          PushPayload and the only outcome is notify or fetch.
+        -->
+        <service
+            android:name=".push.StrazaFcmService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!--
+          Rebuilds the default FirebaseApp from the enrolled deployment's
+          persisted public config before Application.onCreate, because a push
+          can be what creates the process. initOrder is above
+          FirebaseInitProvider's 100 so this runs first, though either order is
+          safe. Not exported: process-local init, serves no data.
+        -->
+        <provider
+            android:name=".push.StrazaFcmInitProvider"
+            android:authorities="${applicationId}.fcm-init"
+            android:exported="false"
+            android:initOrder="101" />
+    </application>
+
+</manifest>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher background: steel-ink ground with a soft radial glow behind the
+     shield, from @color/ic_launcher_glow at the centre to
+     @color/ic_launcher_background at the edge. A gradient VectorDrawable
+     needs API 24. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M0,0 H108 V108 H0 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="54"
+                android:centerY="54"
+                android:gradientRadius="54"
+                android:startColor="@color/ic_launcher_glow"
+                android:endColor="@color/ic_launcher_background" />
+        </aapt:attr>
+    </path>
+</vector>

@@ -1,0 +1,7 @@
+- Pressing Back now steps back one screen instead of closing the app.
+- Tap the deployment name to switch or add deployments.
+- Removing a deployment also removes this phone on the server.
+- Pairing renewal completes even if you switch apps midway.
+- A pairing is no longer dropped over a temporary server error; you can renew or enroll again.
+- Clearer messages when the server is busy or a request has expired.
+- Activity rows scroll into view when opened.

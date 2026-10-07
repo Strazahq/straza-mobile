@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Platform theme parent, with no AppCompat or Material Components dependency:
+  the UI is Compose, so this theme only provides the window before the first
+  frame.
+-->
+<resources>
+    <style name="Theme.Straza" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+</resources>

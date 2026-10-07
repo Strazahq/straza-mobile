@@ -1,0 +1,36 @@
+Straza is the human-in-the-loop approval layer for AI agents, and this is its
+mobile app. When an autonomous agent tries to run a sensitive tool call (a shell
+command, a deployment, a payment), your self-hosted Straza server holds the
+action and asks a human first. This app is where that human decides: one tap
+to approve or deny, gated by your fingerprint or device unlock.
+
+Think "Duo Push, but for AI agents."
+
+How it works
+
+* Enroll once by scanning a QR code shown in your Straza console. Your phone
+  generates a signing key inside its secure hardware (StrongBox / Titan M where
+  available). The private key never leaves the chip and never rides a backup.
+* When an agent needs approval, your phone is notified. The notification carries
+  only an opaque reference: never the command, the tool, or who asked. The app
+  fetches the real decision context over an authenticated, certificate-pinned
+  channel and shows it to you.
+* You approve or deny. The decision is signed by your hardware key and is
+  one-time, short-lived, and idempotent. No signature, no decision.
+* If you do nothing, the request times out and the server denies it. Fail-closed
+  by design: the app never has to "fail open".
+
+Privacy and security
+
+* No trackers, no analytics, no ads. The app talks only to the Straza server you
+  enrolled against, and nowhere else.
+* Nothing about a request ever reaches your lock screen.
+* The approval screen is marked secure: no screenshots, and it is hidden from
+  the recent-apps thumbnail.
+* Free. Push notifications arrive through Firebase Cloud Messaging (via the
+  Straza push relay or your own Firebase project), and the app falls back to
+  polling when push is unavailable.
+
+This app is a companion to a self-hosted Straza server that you or your
+organization run. It is not useful on its own: you need a Straza deployment to
+enroll against.

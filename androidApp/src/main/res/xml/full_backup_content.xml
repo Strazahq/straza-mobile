@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Counterpart to data_extraction_rules.xml for Android 11 and below: exclude
+  everything from backup. Redundant with android:allowBackup="false", and kept
+  so app data stays out of cloud backups if that flag is ever changed.
+-->
+<full-backup-content>
+    <exclude domain="root" path="." />
+    <exclude domain="file" path="." />
+    <exclude domain="database" path="." />
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="external" path="." />
+</full-backup-content>

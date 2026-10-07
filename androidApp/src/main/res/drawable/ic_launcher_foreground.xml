@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher foreground: the compass-shield mark inside the adaptive-icon safe
+     zone. Launchers show the central 72x72dp of the 108dp canvas, with a
+     guaranteed-safe circle of radius 33dp. x2.1 is the largest scale that
+     keeps the shield's top corners (15.66 grid units from the bbox centre)
+     inside it: 2.1 x 15.66 = 32.9dp. The 32-grid bbox centre (16, 17.05) maps
+     to the canvas centre (54, 54). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="2.1"
+        android:scaleY="2.1"
+        android:translateX="20.4"
+        android:translateY="18.2">
+        <path
+            android:fillColor="#F6B63C"
+            android:pathData="M7.4 5 H24.6 A1.4 1.4 0 0 1 26 6.4 V15.2 C26 22.1 21.7 26.9 16 29.1 C10.3 26.9 6 22.1 6 15.2 V6.4 A1.4 1.4 0 0 1 7.4 5 Z" />
+        <path
+            android:fillColor="#0B0D12"
+            android:pathData="M16 7 L17.11 12.52 L19.68 11.52 L18.68 14.09 L24.2 15.2 L18.68 16.31 L19.68 18.88 L17.11 17.88 L16 23.4 L14.89 17.88 L12.32 18.88 L13.32 16.31 L7.8 15.2 L13.32 14.09 L12.32 11.52 L14.89 12.52 Z" />
+    </group>
+</vector>

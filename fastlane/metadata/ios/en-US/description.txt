@@ -1,0 +1,25 @@
+Straza™ gives you the last word over what your AI agents do. When an agent reaches an action that needs a human (a shell command, a database change, a payment), your self-hosted Straza server holds it and sends the request to your iPhone. You see what the agent wants and approve or deny with one tap, confirmed by Face ID or Touch ID.
+
+The same gesture as approving a sign-in on your phone, except the one asking is a machine that wants permission to act.
+
+How it works
+
+* Enroll once with the QR code shown in your Straza console. The code carries the server address and a pin of the server's TLS key, so the app trusts that server alone. Enrolling creates a pairing, which later renews, expires, or is revoked.
+* Your iPhone creates an ECDSA P-256 signing key inside the Secure Enclave. The key cannot leave the chip and is never backed up.
+* The notification carries an opaque request id and nothing else: not the command, not the tool, not who asked. The app fetches the request over the certificate-pinned connection and shows you what the agent wants to do.
+* You approve or deny. The hardware key signs the decision: valid once, short-lived, and safe to send twice. No signature, no decision.
+* If nobody answers, the request expires and the server denies it. Fail-closed by design: silence is never an approval.
+* Your server keeps a hash-chained audit log of every decision; the app has an Activity tab of resolved requests.
+* One phone can pair with several Straza servers. Tap the deployment name to switch.
+
+Privacy and security
+
+* Apart from Apple's push service, the app talks only to the Straza servers it is paired with. No trackers, analytics, ads, or third-party SDKs.
+* Nothing about a request reaches your lock screen.
+* Apple accepts push only through the app publisher's credentials, so push travels from your Straza server through the Straza push relay that SynapTech s.r.o. runs, and from there to Apple. The relay carries only the opaque request id, and your phone never connects to it. Without push, the app polls.
+
+Requirements
+
+* A Straza server that you or your organization runs. The app is free; a Straza server is required to enroll.
+* iOS 16 or later, on an iPhone with Face ID or Touch ID set up.
+* Straza is made by SynapTech s.r.o. More at straza.ai.

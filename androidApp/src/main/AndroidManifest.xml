@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Permissions are added together with the code that uses them: INTERNET with
+  the pinned client, CAMERA with QR enrollment.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- ACCESS_NETWORK_STATE is not declared: no code here uses it.
+         androidx.media3-common (a CameraX transitive) merges it in; the foss
+         flavor removes it again and the play flavor keeps it for FCM. -->
+    <!--
+      Scans the enrollment QR. Requested when the user taps Scan, not at launch.
+      Enrollment also works without it, by pasting the code. The camera is bound
+      only while the scanner is on screen and no frame is written to disk.
+    -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--
+      androidx.biometric 1.1.0 merges in USE_FINGERPRINT, which was deprecated
+      in API 28 (this app's minSdk) and grants nothing here. It is removed at
+      merge time, so re-check the built APK after an androidx.biometric upgrade.
+    -->
+    <uses-permission
+        android:name="android.permission.USE_FINGERPRINT"
+        tools:node="remove" />
+    <!--
+      All required=false, so the app installs on a camera-less device, which
+      enrolls by pasting. `android.hardware.camera` is listed explicitly because
+      the CAMERA permission otherwise implies it as required, and a store
+      filters devices on implied features.
+    -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <!--
+      Push notifications. Requested on API 33+ only once enrolled, not at
+      launch. A denial falls back to polling. The notification content is
+      opaque and does not include the request.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/full_backup_content"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Straza"
+        android:usesCleartextTraffic="false">
+
+        <!--
+          The only component this manifest exports. Nothing else here should be
+          startable by another app.
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Straza"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          Shares the user-initiated Activity CSV export. Not exported: a content
+          URI is created per export and handed to the one app the user picks in
+          the share sheet, with read granted for that intent only. The file
+          lives in private cache.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!--
+          UnifiedPush, in both flavors, so a Play build pointed at a self-hosted
+          strazad can receive push without Google.
+
+          The connector library (3.x) merges in the exported receiver the
+          distributor broadcasts to (MessagingReceiverImpl, with a WAKE_LOCK
+          permission) and an exported RaiseToForegroundService, which serves an
+          empty Binder: binding it can only raise this process's priority
+          briefly. Nothing they carry is trusted (see StrazaPushService.kt).
+          Re-check the merged manifest in the built APK after a connector
+          upgrade.
+
+          This service receives the connector's events in-process and must not
+          be exported: only the connector's own receiver binds it. The connector
+          also holds the Web Push (RFC 8291) keys and decrypts messages before
+          they reach the service.
+        -->
+        <service
+            android:name=".push.StrazaPushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.PUSH_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

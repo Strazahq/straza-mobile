@@ -1,0 +1,4 @@
+First preview build. Enroll against a Straza server by QR, then approve or deny
+an agent's tool calls with a hardware-signed, biometric-gated decision. Includes
+an activity history of past decisions and UnifiedPush notifications with a
+polling fallback.

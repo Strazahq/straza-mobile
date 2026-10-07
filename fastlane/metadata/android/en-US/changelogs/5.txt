@@ -1,0 +1,2 @@
+Remove a deployment: a new menu item with a confirmation screen retires the pairing and destroys its key on this device.
+Manual pairing-code entry is now reachable everywhere: denying the camera no longer dead-ends, and the scanner has an "Enter the code manually" button.

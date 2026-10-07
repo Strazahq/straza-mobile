@@ -1,0 +1,4 @@
+Accessibility: the header controls, Add pill, deployment switcher and
+activity filters now carry spoken labels, selection state and full-size
+touch targets. Smoother startup (secure-storage reads left the UI
+thread) and less battery spent ticking countdowns that cannot change.

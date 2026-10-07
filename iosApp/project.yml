@@ -1,0 +1,49 @@
+# XcodeGen spec. The .xcodeproj is generated and git-ignored:
+#   xcodegen --spec iosApp/project.yml
+# The Swift target is one file that mounts the shared Kotlin module. The
+# pre-build phase below builds that framework with Gradle.
+name: Straza
+options:
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "16.0"
+
+targets:
+  Straza:
+    type: application
+    platform: iOS
+    sources:
+      - Straza
+    scheme: {}
+    settings:
+      base:
+        # Same as the Android applicationId. It cannot change after the first
+        # store upload.
+        PRODUCT_BUNDLE_IDENTIFIER: ai.straza.approver
+        PRODUCT_NAME: Straza
+        INFOPLIST_FILE: Straza/Info.plist
+        # Version numbers live in Info.plist. Keep them in step with
+        # androidApp/build.gradle.kts.
+        GENERATE_INFOPLIST_FILE: NO
+        # A checked-in file, not XcodeGen's entitlements block, which would
+        # overwrite the file at this path with an empty dict.
+        CODE_SIGN_ENTITLEMENTS: Straza/Straza.entitlements
+        FRAMEWORK_SEARCH_PATHS: $(inherited) $(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+        OTHER_LDFLAGS: $(inherited) -framework StrazaShared
+        # Xcode 15+ sandboxes script phases by default, which stops the Gradle
+        # pre-build phase from writing the framework.
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        # Compose Multiplatform 1.11 publishes no Intel-simulator artifacts,
+        # so the shared framework is arm64 only and x86_64 cannot link.
+        "EXCLUDED_ARCHS[sdk=iphonesimulator*]": x86_64
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        # Single-size 1024 px icon (Xcode 14+). Upload validation rejects a
+        # build without it.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    preBuildScripts:
+      - name: Build shared framework (Gradle)
+        script: |
+          cd "$SRCROOT/.."
+          ./gradlew :shared:embedAndSignAppleFrameworkForXcode
+        basedOnDependencyAnalysis: false

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The only path the FileProvider exposes: the "exports" directory in the app's
+  private cache, which holds the latest Activity CSV export.
+-->
+<paths>
+    <cache-path name="exports" path="exports/" />
+</paths>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Steel-ink ground behind the amber compass-shield foreground. -->
+    <color name="ic_launcher_background">#0B0D12</color>
+    <!-- Centre of the launcher background's radial glow: ink warmed with about
+         10% amber, fading to ic_launcher_background at the edge. -->
+    <color name="ic_launcher_glow">#231E16</color>
+</resources>

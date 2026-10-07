@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  foss flavor. The UnifiedPush service is in the main manifest because both
+  flavors share it. This flavor has no Google dependencies because no Firebase
+  or FCM artifact is in its dependency graph and all FCM code is in src/play.
+
+  ACCESS_NETWORK_STATE is merged in by androidx.media3:media3-common, a
+  transitive dependency of CameraX, and nothing in this flavor uses it. The
+  play flavor keeps it for FCM's connection management. Re-check the built APK
+  after a CameraX upgrade.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+</manifest>

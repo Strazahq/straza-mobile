@@ -1,0 +1,34 @@
+# Build output
+build/
+.gradle/
+*.apk
+*.aab
+*.aar
+
+# Local machine config (Android SDK path)
+local.properties
+
+# Signing material
+*.jks
+*.keystore
+keystore.properties
+
+# IDE
+.idea/
+*.iml
+.kotlin/
+
+# macOS / Xcode
+.DS_Store
+xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Firebase config for the play flavor, supplied per deployment
+androidApp/google-services.json
+
+# Local helper scripts
+scripts/new-release-keystore.ps1
+
+# Xcode project, generated from iosApp/project.yml
+iosApp/*.xcodeproj
+xcuserdata/

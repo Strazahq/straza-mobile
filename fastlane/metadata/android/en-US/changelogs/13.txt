@@ -1,0 +1,1 @@
+Push notifications are now opt-in: the app asks once after pairing, and a new switch under Notifications lets you change your choice any time. Until you say yes, nothing about this phone is registered anywhere and the app checks for requests only while open.

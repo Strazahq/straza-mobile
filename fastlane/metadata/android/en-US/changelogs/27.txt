@@ -1,0 +1,8 @@
+- Back steps back one screen instead of closing the app.
+- Tap the deployment name to switch or add deployments.
+- Removing a deployment also removes this phone on the server.
+- Pairing renewal completes even if you switch apps.
+- A pairing survives a temporary server error.
+- Clearer messages when the server is busy or a request expired.
+- Activity shows whether an approved call ran.
+- The scanner stays open after you allow the camera.

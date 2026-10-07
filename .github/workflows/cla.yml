@@ -1,0 +1,106 @@
+name: cla
+
+# The contributor agreement check. It runs the checker that the Straza server
+# repository ships, at a pinned commit of that repository, records each
+# acceptance in the private records repository, confirms it in writing on the
+# pull request and reports the status straza/cla, which the branch ruleset
+# requires. The edited type of pull_request_target runs it again when a title
+# or description changes.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, closed]
+  issue_comment:
+    types: [created, edited, deleted]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number to check again
+        required: true
+
+# Each job names the permissions it needs. Neither job checks out or runs
+# code from the pull request. Both check out the server repository at the
+# pinned commit below, so the program they run is one the maintainer chose,
+# and they read the pull request through GitHub's API.
+permissions: {}
+
+env:
+  # The commit of strazahq/straza whose tools/clacheck runs here. The
+  # maintainer sets the full commit id of the server's first public tree.
+  CLACHECK_REF: 49f58699f3c0e07923818b3c16e4a584244942ce
+
+jobs:
+  # Sets straza/cla to pending on the pull request's head at once, outside
+  # the queue, so no earlier success stands while the recording run waits.
+  pending:
+    if: github.event_name != 'issue_comment' || github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+      statuses: write
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: strazahq/straza
+          ref: ${{ env.CLACHECK_REF }}
+          path: straza
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: straza/go.mod
+          cache: false
+      - run: go run ./tools/clacheck -pending
+        working-directory: straza
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLA_PR: ${{ inputs.pr }}
+
+  record:
+    needs: pending
+    # The recording run goes ahead when the pending job failed, because it
+    # sets pending itself before anything else.
+    if: ${{ !cancelled() && (github.event_name != 'issue_comment' || github.event.issue.pull_request) }}
+    runs-on: ubuntu-latest
+    # A stuck run would hold the queue for every pull request.
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      statuses: write
+    # One run at a time for the whole records repository, so that two runs
+    # never race on the same record. queue: max keeps up to 100 pending runs
+    # instead of cancelling all but the newest, and each run repairs what a
+    # cancelled one missed.
+    concurrency:
+      group: cla-records
+      queue: max
+    # The environment allows the default branch only and holds the records
+    # token, so a run started from any other branch cannot read it.
+    environment: cla
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: strazahq/straza
+          ref: ${{ env.CLACHECK_REF }}
+          path: straza
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: straza/go.mod
+          cache: false
+      # The program reads the event from the file GITHUB_EVENT_PATH names, so
+      # no text from the pull request is ever put into a shell line.
+      - run: go run ./tools/clacheck
+        working-directory: straza
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLA_RECORDS_TOKEN: ${{ secrets.CLA_RECORDS_TOKEN }}
+          CLA_PR: ${{ inputs.pr }}
+          CLA_VERSION: "1.2"
+          # The agreement's text at the server's first public commit. The text
+          # is the same in every repository of the organization.
+          CLA_TEXT_URL: "https://github.com/strazahq/straza/blob/49f58699f3c0e07923818b3c16e4a584244942ce/CLA.md"
+          # The maintainer's account and dependabot[bot].
+          CLA_ALLOWLIST_IDS: "98211187,49699333"

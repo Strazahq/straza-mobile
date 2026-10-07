@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar and notification icon. Android renders small icons as a
+     monochrome alpha mask and tints them, so this is white on transparent.
+     It uses the small form of the mark (four cardinal blades), because the
+     eight-point rose closes up below about 24px. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M7.4 5 H24.6 A1.4 1.4 0 0 1 26 6.4 V15.2 C26 22.1 21.7 26.9 16 29.1 C10.3 26.9 6 22.1 6 15.2 V6.4 A1.4 1.4 0 0 1 7.4 5 Z M16 6.9 L18.4 12.9 L24.4 15.3 L18.4 17.7 L16 23.7 L13.6 17.7 L7.6 15.3 L13.6 12.9 Z" />
+</vector>

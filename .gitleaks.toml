@@ -1,0 +1,7 @@
+# Gitleaks configuration. Every allowlist entry must say why the value is not
+# a real secret and be scoped to a path, ideally to the literal itself.
+
+title = "Straza mobile"
+
+[extend]
+useDefault = true

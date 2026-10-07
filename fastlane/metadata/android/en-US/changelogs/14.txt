@@ -1,0 +1,1 @@
+Push is now opt-in, and the ask is the real question: who should deliver push for this phone. Pick Google push, UnifiedPush, or polling only; nothing about this phone is registered anywhere until you choose. A new Push service screen in the menu holds the master switch, the same provider picker, and delivery status, so you can change your answer any time.

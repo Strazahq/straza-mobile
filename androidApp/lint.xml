@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Lint runs with warningsAsErrors=true (androidApp/build.gradle.kts). There is
+  no baseline file: every suppression below is narrow and carries its reason.
+-->
+<lint>
+    <!--
+      False positive: lint calls the v26 qualifier redundant at minSdk 28, but
+      AAPT2 refuses to link <adaptive-icon> resources without it ("resource
+      mipmap/ic_launcher not found"). Re-test when AGP is upgraded.
+    -->
+    <issue id="ObsoleteSdkInt">
+        <ignore path="src/main/res/mipmap-anydpi-v26" />
+    </issue>
+</lint>
